@@ -1,60 +1,48 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Image Converter Pro</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="icon" href="logo.svg"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Image Format Converter</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body data-theme="light">
+<body>
   <div class="container">
     <header>
-      <img src="logo.svg" class="logo" alt="Logo"/>
-      <h1>Image Converter Pro</h1>
-      <p>Convert, compress, resize, & batch images with history — cepat, aman, profesional!</p>
-      <button id="toggle-theme">Ganti Mode</button>
+      <div class="icon">
+        <img src="https://img.icons8.com/fluency/48/000000/image.png" alt="Image Icon"/>
+      </div>
+      <div>
+        <h1>Image Format Converter</h1>
+        <p>Convert your images to JPG, PNG, WEBP, or BMP format</p>
+      </div>
     </header>
-    <main>
-      <form id="convert-form" enctype="multipart/form-data">
-        <div class="form-group">
-          <label>Pilih Gambar (multi-file):</label>
-          <input type="file" name="images" id="images" accept="image/*" multiple required>
-        </div>
-        <div class="form-group">
-          <label>Format Output:</label>
+    <section class="upload-section">
+      <h2>Upload Image</h2>
+      <p>Select an image file to convert to a different format</p>
+      <form id="uploadForm" enctype="multipart/form-data">
+        <label class="drop-area" id="dropArea">
+          <input type="file" name="images" id="fileInput" accept="image/jpeg,image/png,image/webp,image/bmp" hidden>
+          <div class="drop-content">
+            <img src="https://img.icons8.com/ios/50/000000/upload-to-cloud.png" alt="Upload"/>
+            <span>Drop your image here or click to browse</span>
+            <small>Supports JPG, PNG, WEBP, BMP files up to 10MB</small>
+          </div>
+          <button type="button" id="chooseFileBtn">Choose File</button>
+        </label>
+        <div class="format-select">
+          <label for="format">Convert to:</label>
           <select name="format" id="format">
+            <option value="jpg">JPG</option>
             <option value="png">PNG</option>
-            <option value="jpeg">JPEG</option>
-            <option value="webp">WebP</option>
-            <option value="gif">GIF</option>
+            <option value="webp">WEBP</option>
+            <option value="bmp">BMP</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>Resize (opsional):</label>
-          <input type="number" name="width" id="width" placeholder="Width px" min="1">
-          <input type="number" name="height" id="height" placeholder="Height px" min="1">
-        </div>
-        <div class="form-group">
-          <label>Kualitas (1-100, hanya JPEG/WEBP/PNG):</label>
-          <input type="number" name="quality" id="quality" min="1" max="100" value="80">
-        </div>
-        <button type="submit" id="convert-btn">Convert & Download</button>
-        <div id="progress" class="progress"></div>
+        <button type="submit" class="submit-btn">Convert</button>
       </form>
-      <section id="preview-section">
-        <h2>Preview Gambar</h2>
-        <div id="preview-list"></div>
-      </section>
-      <section id="history-section">
-        <h2>Riwayat Konversi</h2>
-        <ul id="history-list"></ul>
-      </section>
-    </main>
-    <footer>
-      <small>Privasi terjaga: gambar tidak disimpan di server.<br>
-      &copy; 2025 Image Converter Pro.</small>
-    </footer>
+      <div id="result"></div>
+    </section>
   </div>
   <script src="script.js"></script>
 </body>
