@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Converter Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" href="logo.svg"/>
+</head>
+<body data-theme="light">
+  <div class="container">
+    <header>
+      <img src="logo.svg" class="logo" alt="Logo"/>
+      <h1>Image Converter Pro</h1>
+      <p>Convert, compress, resize, & batch images with history — cepat, aman, profesional!</p>
+      <button id="toggle-theme">Ganti Mode</button>
+    </header>
+    <main>
+      <form id="convert-form" enctype="multipart/form-data">
+        <div class="form-group">
+          <label>Pilih Gambar (multi-file):</label>
+          <input type="file" name="images" id="images" accept="image/*" multiple required>
+        </div>
+        <div class="form-group">
+          <label>Format Output:</label>
+          <select name="format" id="format">
+            <option value="png">PNG</option>
+            <option value="jpeg">JPEG</option>
+            <option value="webp">WebP</option>
+            <option value="gif">GIF</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Resize (opsional):</label>
+          <input type="number" name="width" id="width" placeholder="Width px" min="1">
+          <input type="number" name="height" id="height" placeholder="Height px" min="1">
+        </div>
+        <div class="form-group">
+          <label>Kualitas (1-100, hanya JPEG/WEBP/PNG):</label>
+          <input type="number" name="quality" id="quality" min="1" max="100" value="80">
+        </div>
+        <button type="submit" id="convert-btn">Convert & Download</button>
+        <div id="progress" class="progress"></div>
+      </form>
+      <section id="preview-section">
+        <h2>Preview Gambar</h2>
+        <div id="preview-list"></div>
+      </section>
+      <section id="history-section">
+        <h2>Riwayat Konversi</h2>
+        <ul id="history-list"></ul>
+      </section>
+    </main>
+    <footer>
+      <small>Privasi terjaga: gambar tidak disimpan di server.<br>
+      &copy; 2025 Image Converter Pro.</small>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
