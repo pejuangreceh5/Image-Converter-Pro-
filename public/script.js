@@ -1,148 +1,73 @@
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: #f5f5f5;
-}
+const dropArea = document.getElementById('dropArea');
+const fileInput = document.getElementById('fileInput');
+const chooseFileBtn = document.getElementById('chooseFileBtn');
+const uploadForm = document.getElementById('uploadForm');
+const resultDiv = document.getElementById('result');
 
-.container {
-  max-width: 450px;
-  margin: 2.5rem auto;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
-  padding: 24px 16px 32px 16px;
-}
+// Open file dialog when "Choose File" button is clicked
+chooseFileBtn.addEventListener('click', (e) => {
+  fileInput.click();
+});
 
-header {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 24px;
-}
-
-header .icon img {
-  width: 48px;
-  height: 48px;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-header p {
-  margin: 0;
-  font-size: 1rem;
-  color: #555;
-}
-
-.upload-section h2 {
-  margin-top: 0;
-}
-
-.upload-section p {
-  color: #666;
-  font-size: 0.96rem;
-}
-
-.drop-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 2px dashed #bbb;
-  border-radius: 14px;
-  background: #f9f9f9;
-  padding: 32px 16px;
-  margin: 16px 0;
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
-  position: relative;
-}
-
-.drop-area.dragover {
-  border-color: #4a90e2;
-  background: #eaf6ff;
-}
-
-.drop-content {
-  text-align: center;
-}
-
-.drop-content img {
-  width: 38px;
-  margin-bottom: 12px;
-  opacity: 0.7;
-}
-
-.drop-content span {
-  display: block;
-  font-size: 1.13rem;
-  margin-bottom: 6px;
-}
-
-.drop-content small {
-  color: #888;
-  font-size: 0.93rem;
-}
-
-#chooseFileBtn {
-  margin-top: 18px;
-  background: #1976d2;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 22px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-#chooseFileBtn:hover {
-  background: #1565c0;
-}
-
-.format-select {
-  margin-bottom: 16px;
-}
-
-.format-select label {
-  font-weight: 500;
-}
-
-.format-select select {
-  margin-left: 8px;
-  font-size: 1rem;
-}
-
-.submit-btn {
-  width: 100%;
-  background: #4a90e2;
-  color: #fff;
-  border: none;
-  border-radius: 7px;
-  font-size: 1.07rem;
-  padding: 12px 0;
-  cursor: pointer;
-  margin-top: 12px;
-  transition: background 0.2s;
-}
-
-.submit-btn:hover {
-  background: #357abd;
-}
-
-#result {
-  margin-top: 18px;
-  text-align: center;
-  font-size: 1rem;
-  color: #1a9d35;
-  word-break: break-all;
-}
-
-@media (max-width: 540px) {
-  .container {
-    max-width: 98vw;
-    margin: 0.5rem;
-    padding: 8px 3vw 24px 3vw;
+// Drag & drop highlight
+dropArea.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  dropArea.classList.add('dragover');
+});
+dropArea.addEventListener('dragleave', (e) => {
+  e.preventDefault();
+  dropArea.classList.remove('dragover');
+});
+dropArea.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropArea.classList.remove('dragover');
+  if (e.dataTransfer.files.length) {
+    fileInput.files = e.dataTransfer.files;
+    chooseFileBtn.textContent = fileInput.files[0].name;
   }
+});
+
+// Show selected file name
+fileInput.addEventListener('change', () => {
+  if (fileInput.files.length) {
+    chooseFileBtn.textContent = fileInput.files[0].name;
+  } else {
+    chooseFileBtn.textContent = "Choose File";
+  }
+});
+
+// Handle form submit (upload & convert image)
+uploadForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  resultDiv.textContent = '';
+  if (!fileInput.files.length) {
+    resultDiv.textContent = 'Please select an image file.';
+    return;
+  }
+  const formData = new FormData();
+  formData.append('images', fileInput.files[0]);
+  formData.append('format', document.getElementById('format').value);
+
+  resultDiv.textContent = 'Converting...';
+
+  try {
+    const res = await fetch('/convert', {
+      method: 'POST',
+      body: formData
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || 'Conversion failed');
     }
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `converted.${document.getElementById('format').value}`;
+    a.textContent = 'Download Converted Image';
+    resultDiv.innerHTML = '';
+    resultDiv.appendChild(a);
+  } catch (err) {
+    resultDiv.textContent = 'Error: ' + err.message;
+  }
+});
