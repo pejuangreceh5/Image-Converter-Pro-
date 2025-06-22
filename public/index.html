@@ -9,30 +9,27 @@
 <body>
   <main class="main-container">
     <section class="header-section">
-      <img src="https://img.icons8.com/fluency/48/000000/image.png" alt="Image Icon" class="logo"/>
+      <img src="logo.svg" alt="Image Icon" class="logo"/>
       <div>
         <h1>Image Format Converter</h1>
-        <p class="desc">Convert your images to JPG, PNG, or WEBP format easily and quickly.</p>
+        <p class="desc">Convert your images to any popular format instantly (JPG, PNG, WEBP, TIFF, AVIF, HEIF, GIF).</p>
       </div>
     </section>
     <form id="uploadForm" enctype="multipart/form-data" class="form-section">
       <label for="fileInput" class="upload-area" id="dropArea">
-        <input type="file" id="fileInput" name="images" accept="image/jpeg,image/png,image/webp" hidden>
+        <input type="file" id="fileInput" name="images" accept="image/jpeg,image/png,image/webp,image/avif,image/heif,image/tiff,image/gif" hidden>
         <div class="upload-content">
           <img src="https://img.icons8.com/ios/50/000000/upload-to-cloud.png" alt="Upload" class="upload-icon"/>
           <p><span id="chooseFileText">Drop your image here or <b>click to browse</b></span></p>
-          <small>Supported: JPG, PNG, WEBP (max 10MB)</small>
+          <small>Supported: JPG, PNG, WEBP, TIFF, AVIF, HEIF, GIF (max 10MB)</small>
         </div>
         <button type="button" id="chooseFileBtn" class="choose-btn">Choose File</button>
       </label>
       <div class="select-row">
         <label for="format">Convert to:</label>
-        <select name="format" id="format">
-          <option value="jpeg">JPG</option>
-          <option value="png">PNG</option>
-          <option value="webp">WEBP</option>
-        </select>
+        <select name="format" id="format"></select>
       </div>
+      <small style="color: #888; display:block; margin-bottom:8px;">*GIF output only, input non-animated GIF only</small>
       <button type="submit" class="convert-btn">Convert</button>
       <div id="result" class="result-box"></div>
     </form>
