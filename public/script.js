@@ -1,9 +1,11 @@
-// Supported output formats (must match backend)
+const CLOUD_NAME = "dvci00pm3";
+const UPLOAD_PRESET = "unsigned_preset";
+
+// Output formats allowed by Cloudinary
 const outputFormats = [
-  { value: "jpeg", label: "JPEG (jpg)" },
+  { value: "jpg", label: "JPEG (jpg)" },
   { value: "png", label: "PNG" },
   { value: "webp", label: "WEBP" },
-  { value: "tiff", label: "TIFF" }
 ];
 
 // Render select options
@@ -22,12 +24,10 @@ const chooseFileBtn = document.getElementById('chooseFileBtn');
 const uploadForm = document.getElementById('uploadForm');
 const resultDiv = document.getElementById('result');
 
-// Open file dialog when "Choose File" button is clicked
 chooseFileBtn.addEventListener('click', (e) => {
   fileInput.click();
 });
 
-// Drag & drop highlight
 dropArea.addEventListener('dragover', (e) => {
   e.preventDefault();
   dropArea.classList.add('dragover');
@@ -45,7 +45,6 @@ dropArea.addEventListener('drop', (e) => {
   }
 });
 
-// Show selected file name
 fileInput.addEventListener('change', () => {
   if (fileInput.files.length) {
     chooseFileBtn.textContent = fileInput.files[0].name;
@@ -54,7 +53,6 @@ fileInput.addEventListener('change', () => {
   }
 });
 
-// Handle form submit (upload & convert image)
 uploadForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   resultDiv.innerHTML = '';
@@ -64,42 +62,29 @@ uploadForm.addEventListener('submit', async (e) => {
     resultDiv.style.color = 'red';
     return;
   }
-  const formData = new FormData();
-  formData.append('images', fileInput.files[0]);
-  formData.append('format', formatSelect.value);
+  const file = fileInput.files[0];
+  const format = formatSelect.value;
 
-  resultDiv.textContent = 'Converting...';
-  resultDiv.style.color = '';
+  resultDiv.textContent = 'Uploading & converting via Cloudinary...';
 
   try {
-    const res = await fetch('/api/convert', {
-      method: 'POST',
-      body: formData
-    });
+    // 1. Upload ke Cloudinary
+    const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', UPLOAD_PRESET);
 
-    if (res.ok) {
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `converted.${formatSelect.value}`;
-      a.textContent = 'Download Converted Image';
-      resultDiv.innerHTML = '';
-      resultDiv.style.color = '';
-      resultDiv.appendChild(a);
-    } else {
-      let message = 'Conversion failed';
-      try {
-        const data = await res.json();
-        message = data.message || message;
-      } catch {
-        try {
-          const text = await res.text();
-          message = text || message;
-        } catch {}
-      }
-      throw new Error(message);
-    }
+    const res = await fetch(url, { method: "POST", body: fd });
+    if (!res.ok) throw new Error("Cloudinary upload failed");
+    const data = await res.json();
+    // 2. Generate URL hasil konversi format
+    const convertedUrl = data.secure_url.replace('/upload/', `/upload/f_${format}/`);
+    // 3. Tampilkan hasil download & preview
+    resultDiv.innerHTML = `
+      <a href="${convertedUrl}" download="converted.${format}" target="_blank">Download Converted Image (${format.toUpperCase()})</a><br>
+      <img src="${convertedUrl}" alt="Converted Preview" style="max-width:100%;margin-top:12px;border:1px solid #ddd;">
+    `;
+    resultDiv.style.color = '';
   } catch (err) {
     resultDiv.textContent = 'Error: ' + err.message;
     resultDiv.style.color = 'red';
