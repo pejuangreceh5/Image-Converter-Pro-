@@ -12,16 +12,16 @@
       <img src="logo.svg" alt="Image Icon" class="logo"/>
       <div>
         <h1>Image Format Converter</h1>
-        <p class="desc">Convert your images to any popular format instantly (JPG, PNG, WEBP, TIFF).</p>
+        <p class="desc">Convert images instantly (JPG, PNG, WEBP) via Cloudinary API – No Backend Needed!</p>
       </div>
     </section>
     <form id="uploadForm" enctype="multipart/form-data" class="form-section">
       <label for="fileInput" class="upload-area" id="dropArea">
-        <input type="file" id="fileInput" name="images" accept="image/jpeg,image/png,image/webp,image/tiff" hidden>
+        <input type="file" id="fileInput" name="images" accept="image/jpeg,image/png,image/webp" hidden>
         <div class="upload-content">
           <img src="https://img.icons8.com/ios/50/000000/upload-to-cloud.png" alt="Upload" class="upload-icon"/>
           <p><span id="chooseFileText">Drop your image here or <b>click to browse</b></span></p>
-          <small>Supported: JPG, PNG, WEBP, TIFF (max 10MB)</small>
+          <small>Supported: JPG, PNG, WEBP (max 10MB)</small>
         </div>
         <button type="button" id="chooseFileBtn" class="choose-btn">Choose File</button>
       </label>
@@ -29,7 +29,6 @@
         <label for="format">Convert to:</label>
         <select name="format" id="format"></select>
       </div>
-      <small style="color: #888; display:block; margin-bottom:8px;">Supported output: JPG, PNG, WEBP, TIFF</small>
       <button type="submit" class="convert-btn">Convert</button>
       <div id="result" class="result-box"></div>
     </form>
@@ -39,4 +38,4 @@
   </main>
   <script src="script.js"></script>
 </body>
-  </html>
+</html>
