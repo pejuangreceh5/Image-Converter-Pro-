@@ -1,3 +1,24 @@
+// Supported output formats (must match backend)
+const outputFormats = [
+  { value: "jpeg", label: "JPEG (jpg)" },
+  { value: "png", label: "PNG" },
+  { value: "webp", label: "WEBP" },
+  { value: "tiff", label: "TIFF" },
+  { value: "avif", label: "AVIF" },
+  { value: "heif", label: "HEIF" },
+  { value: "gif", label: "GIF*" }
+];
+
+// Render select options
+const formatSelect = document.getElementById("format");
+formatSelect.innerHTML = "";
+outputFormats.forEach(f => {
+  const option = document.createElement("option");
+  option.value = f.value;
+  option.textContent = f.label;
+  formatSelect.appendChild(option);
+});
+
 const dropArea = document.getElementById('dropArea');
 const fileInput = document.getElementById('fileInput');
 const chooseFileBtn = document.getElementById('chooseFileBtn');
@@ -39,35 +60,47 @@ fileInput.addEventListener('change', () => {
 // Handle form submit (upload & convert image)
 uploadForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  resultDiv.textContent = '';
+  resultDiv.innerHTML = '';
+  resultDiv.style.color = '';
   if (!fileInput.files.length) {
     resultDiv.textContent = 'Please select an image file.';
+    resultDiv.style.color = 'red';
     return;
   }
   const formData = new FormData();
   formData.append('images', fileInput.files[0]);
-  formData.append('format', document.getElementById('format').value);
+  formData.append('format', formatSelect.value);
 
   resultDiv.textContent = 'Converting...';
+  resultDiv.style.color = '';
 
   try {
-    const res = await fetch('/convert', {
+    const res = await fetch('/api/convert', {
       method: 'POST',
       body: formData
     });
     if (!res.ok) {
-      const text = await res.text();
-      throw new Error(text || 'Conversion failed');
+      let message = 'Conversion failed';
+      try {
+        const data = await res.json();
+        message = data.message || message;
+      } catch {
+        const text = await res.text();
+        message = text || message;
+      }
+      throw new Error(message);
     }
     const blob = await res.blob();
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `converted.${document.getElementById('format').value}`;
+    a.download = `converted.${formatSelect.value}`;
     a.textContent = 'Download Converted Image';
     resultDiv.innerHTML = '';
+    resultDiv.style.color = '';
     resultDiv.appendChild(a);
   } catch (err) {
     resultDiv.textContent = 'Error: ' + err.message;
+    resultDiv.style.color = 'red';
   }
 });
