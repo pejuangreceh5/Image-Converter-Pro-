@@ -1,33 +1,28 @@
-# Image Converter Pro
+# Image Converter Pro (Vercel Version - All Sharp Formats)
 
-Situs web profesional untuk mengonversi gambar ke berbagai format dengan 11 fitur utama.
+A professional web app to convert images (JPG, PNG, WEBP, TIFF, AVIF, HEIF, GIF) via Vercel Serverless API.
 
-## 11 Fitur Utama
+## Features
 
-1. **Upload Gambar** — Mendukung berbagai format (JPG, PNG, GIF, WebP, dsb).
-2. **Konversi Format** — Pilih hasil PNG, JPEG, WebP, GIF, dst.
-3. **Preview Gambar** — Lihat preview gambar sebelum & sesudah konversi.
-4. **Download Hasil** — Unduh gambar hasil konversi dengan satu klik.
-5. **Batch Conversion** — Konversi banyak gambar sekaligus.
-6. **Resize & Compress** — Ubah ukuran & kualitas gambar.
-7. **Keamanan & Privasi** — Gambar tidak disimpan di server.
-8. **Dark/Light Mode** — Pilihan tema terang atau gelap.
-9. **Mobile Responsive** — Nyaman di HP maupun desktop.
-10. **Progress Bar** — Indikator loading saat proses konversi.
-11. **Riwayat Konversi** — Lihat & unduh ulang hasil konversi sebelumnya.
+- Upload & convert images to all popular formats supported by Sharp
+- Drag & drop, progress, download result
+- 100% serverless, runs on Vercel API route
 
-## Cara Menjalankan
+## How to Deploy
 
-1. Install dependencies:
+1. **Fork or Download this repo**
+2. **Install dependencies locally** (for dev/test):
     ```
     npm install
     ```
-2. Jalankan server:
-    ```
-    npm start
-    ```
-3. Buka browser ke `http://localhost:3000`
+3. **Push to GitHub**
+4. **Import to [Vercel](https://vercel.com/import)**
+5. **Done. Access at https://your-project-name.vercel.app/**
+
+## Notes
+
+- Max upload file size: 10MB
+- Supported output: jpg, png, webp, tiff, avif, heif, gif
+- GIF: Only static GIF output, not all sharp builds support GIF
 
 ---
-
-&copy; 2025 Image Converter Pro.
