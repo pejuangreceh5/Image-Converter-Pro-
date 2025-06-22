@@ -3,10 +3,7 @@ const outputFormats = [
   { value: "jpeg", label: "JPEG (jpg)" },
   { value: "png", label: "PNG" },
   { value: "webp", label: "WEBP" },
-  { value: "tiff", label: "TIFF" },
-  { value: "avif", label: "AVIF" },
-  { value: "heif", label: "HEIF" },
-  { value: "gif", label: "GIF*" }
+  { value: "tiff", label: "TIFF" }
 ];
 
 // Render select options
@@ -81,7 +78,6 @@ uploadForm.addEventListener('submit', async (e) => {
     });
 
     if (res.ok) {
-      // Jika sukses, baca sekali saja sebagai blob
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -92,7 +88,6 @@ uploadForm.addEventListener('submit', async (e) => {
       resultDiv.style.color = '';
       resultDiv.appendChild(a);
     } else {
-      // Jika error, baca sekali saja sebagai json atau text
       let message = 'Conversion failed';
       try {
         const data = await res.json();
