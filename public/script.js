@@ -79,26 +79,32 @@ uploadForm.addEventListener('submit', async (e) => {
       method: 'POST',
       body: formData
     });
-    if (!res.ok) {
+
+    if (res.ok) {
+      // Jika sukses, baca sekali saja sebagai blob
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `converted.${formatSelect.value}`;
+      a.textContent = 'Download Converted Image';
+      resultDiv.innerHTML = '';
+      resultDiv.style.color = '';
+      resultDiv.appendChild(a);
+    } else {
+      // Jika error, baca sekali saja sebagai json atau text
       let message = 'Conversion failed';
       try {
         const data = await res.json();
         message = data.message || message;
       } catch {
-        const text = await res.text();
-        message = text || message;
+        try {
+          const text = await res.text();
+          message = text || message;
+        } catch {}
       }
       throw new Error(message);
     }
-    const blob = await res.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `converted.${formatSelect.value}`;
-    a.textContent = 'Download Converted Image';
-    resultDiv.innerHTML = '';
-    resultDiv.style.color = '';
-    resultDiv.appendChild(a);
   } catch (err) {
     resultDiv.textContent = 'Error: ' + err.message;
     resultDiv.style.color = 'red';
