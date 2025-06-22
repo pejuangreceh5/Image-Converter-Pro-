@@ -1,6 +1,6 @@
 import { IncomingForm } from 'formidable';
-import sharp from 'sharp';
 import fs from 'fs';
+import sharp from 'sharp';
 
 export const config = {
   api: { bodyParser: false },
@@ -13,18 +13,25 @@ const formatHandlers = {
   tiff: (img) => img.tiff(),
 };
 
+// Helper: read file as buffer safely
+function readFileBuffer(file) {
+  // Formidable stores file at file.filepath
+  return fs.readFileSync(file.filepath);
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ status: 'error', message: 'Method not allowed' });
   }
 
-  const form = new IncomingForm({ maxFileSize: 10 * 1024 * 1024 }); // 10MB
+  const form = new IncomingForm({ maxFileSize: 10 * 1024 * 1024, keepExtensions: true });
 
   form.parse(req, async (err, fields, files) => {
     if (err) {
       console.error('Form parse error:', err);
       return res.status(400).json({ status: 'error', message: err.message });
     }
+
     const file = files.images;
     const format = (fields.format || 'png').toLowerCase();
     const allowed = Object.keys(formatHandlers);
@@ -35,15 +42,18 @@ export default async function handler(req, res) {
     if (!allowed.includes(format)) {
       return res.status(400).json({ status: 'error', message: `Output format not supported. Supported: ${allowed.join(', ').toUpperCase()}` });
     }
-    try {
-      let image = sharp(file.filepath);
-      image = formatHandlers[format](image);
 
-      const buffer = await image.toBuffer();
-      fs.unlinkSync(file.filepath);
+    try {
+      const buffer = readFileBuffer(file); // read file as buffer
+      let image = sharp(buffer);
+      image = formatHandlers[format](image);
+      const outBuffer = await image.toBuffer();
+
+      // Clean up temp file
+      try { fs.unlinkSync(file.filepath); } catch {}
 
       res.setHeader('Content-Type', `image/${format}`);
-      res.status(200).end(buffer);
+      res.status(200).end(outBuffer);
     } catch (e) {
       console.error('Processing error:', e);
       res.status(500).json({ status: 'error', message: e.message });
