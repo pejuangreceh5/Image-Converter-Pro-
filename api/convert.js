@@ -11,9 +11,6 @@ const formatHandlers = {
   png: (img) => img.png(),
   webp: (img) => img.webp(),
   tiff: (img) => img.tiff(),
-  avif: (img) => img.avif(),
-  heif: (img) => img.heif(),
-  gif: (img) => (typeof img.gif === 'function' ? img.gif() : img), // GIF output only if supported
 };
 
 export default async function handler(req, res) {
@@ -25,6 +22,7 @@ export default async function handler(req, res) {
 
   form.parse(req, async (err, fields, files) => {
     if (err) {
+      console.error('Form parse error:', err);
       return res.status(400).json({ status: 'error', message: err.message });
     }
     const file = files.images;
@@ -47,7 +45,8 @@ export default async function handler(req, res) {
       res.setHeader('Content-Type', `image/${format}`);
       res.status(200).end(buffer);
     } catch (e) {
+      console.error('Processing error:', e);
       res.status(500).json({ status: 'error', message: e.message });
     }
   });
-        }
+}
