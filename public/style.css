@@ -37,12 +37,6 @@ h1 {
   font-weight: 600;
 }
 
-.desc {
-  margin: 0;
-  color: #555e7b;
-  font-size: 1rem;
-}
-
 .form-section {
   display: flex;
   flex-direction: column;
@@ -131,9 +125,34 @@ select#format {
 
 .result-box img {
   margin-top: 8px;
-  max-width: 100%;
-  border-radius: 6px;
+  max-width: 170px;
+  max-height: 170px;
+  border-radius: 8px;
   box-shadow: 0 2px 12px 0 rgba(90,139,238,0.07);
+  border: 1.5px solid #e1e6f4;
+  object-fit: contain;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.download-btn {
+  display: inline-block;
+  margin: 18px auto 0 auto;
+  background: linear-gradient(90deg, #5a8bee 0%, #36d1c5 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 32px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 10px 0 rgba(90,139,238,0.08);
+  transition: background 0.18s, transform 0.13s;
+}
+.download-btn:hover {
+  background: linear-gradient(90deg, #366fd9 0%, #27bfa5 100%);
+  transform: translateY(-2px) scale(1.04);
 }
 
 footer {
@@ -153,5 +172,14 @@ footer {
   .logo {
     width: 40px;
     height: 40px;
+  }
+  .result-box img {
+    max-width: 90vw;
+    max-height: 40vw;
+  }
+  .download-btn {
+    width: 80vw;
+    padding: 12px 0;
+    font-size: 1rem;
   }
   }
