@@ -80,7 +80,7 @@ uploadForm.addEventListener('submit', async (e) => {
   const file = fileInput.files[0];
   const format = formatSelect.value;
 
-  resultDiv.textContent = 'Uploading & converting via Cloudinary...';
+  resultDiv.textContent = 'Uploading & converting...';
 
   try {
     // Upload ke Cloudinary
@@ -103,8 +103,8 @@ uploadForm.addEventListener('submit', async (e) => {
 
     // Render preview dan tombol download (tanpa expose url Cloudinary)
     resultDiv.innerHTML = `
-      <img src="${imgSrc}" alt="Converted Preview" style="max-width:100%;margin-top:12px;border:1px solid #ddd;"><br>
-      <button id="downloadBtn" type="button" class="convert-btn">Download</button>
+      <img src="${imgSrc}" alt="Converted Preview">
+      <button id="downloadBtn" type="button" class="download-btn">Download</button>
     `;
 
     document.getElementById('downloadBtn').addEventListener('click', function() {
