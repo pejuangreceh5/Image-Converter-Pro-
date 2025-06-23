@@ -1,44 +1,46 @@
 body {
-  margin: 0;
+  background: #f6f7fb;
   font-family: 'Segoe UI', Arial, sans-serif;
-  background: #f5f7fa;
+  margin: 0;
+  padding: 0;
   min-height: 100vh;
 }
 
 .main-container {
-  max-width: 400px;
-  margin: 2.5rem auto;
+  max-width: 430px;
+  margin: 40px auto 0 auto;
   background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.09);
-  padding: 26px 16px 30px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
+  border-radius: 13px;
+  padding: 32px 20px 20px 20px;
 }
 
 .header-section {
   display: flex;
   align-items: center;
-  gap: 18px;
-  margin-bottom: 8px;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .logo {
-  width: 48px;
-  height: 48px;
+  width: 54px;
+  height: 54px;
+  border-radius: 11px;
+  background: #f6f7fb;
+  object-fit: cover;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
 }
 
-.header-section h1 {
-  margin: 0 0 4px 0;
-  font-size: 1.33rem;
-  font-weight: 700;
+h1 {
+  font-size: 1.7rem;
+  margin: 0 0 5px 0;
+  font-weight: 600;
 }
 
-.header-section .desc {
+.desc {
   margin: 0;
+  color: #555e7b;
   font-size: 1rem;
-  color: #555;
 }
 
 .form-section {
@@ -48,117 +50,108 @@ body {
 }
 
 .upload-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 2px dashed #bfc7d8;
-  border-radius: 12px;
-  background: #f7faff;
-  padding: 28px 10px;
-  margin: 0 0 10px 0;
+  background: #f3f6fa;
+  border: 2px dashed #aac1e3;
+  border-radius: 9px;
+  padding: 22px 10px 16px 10px;
+  text-align: center;
   cursor: pointer;
-  transition: border-color .2s, background .2s;
+  transition: border-color 0.2s;
   position: relative;
 }
 
 .upload-area.dragover {
-  border-color: #4a90e2;
-  background: #eaf6ff;
-}
-
-.upload-content {
-  text-align: center;
+  border-color: #5a8bee;
+  background: #e6eeff;
 }
 
 .upload-icon {
-  width: 40px;
-  height: 40px;
+  width: 44px;
   margin-bottom: 10px;
   opacity: 0.8;
 }
 
-#chooseFileText {
-  font-size: 1.07rem;
+.upload-content {
+  margin-bottom: 10px;
 }
 
 .choose-btn {
-  margin-top: 16px;
-  background: #1976d2;
+  margin-top: 0;
+  background: #5a8bee;
   color: #fff;
   border: none;
   border-radius: 6px;
-  padding: 10px 22px;
+  padding: 7px 18px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background .2s;
+  transition: background 0.17s;
 }
 
-.choose-btn:hover {
-  background: #1565c0;
+.choose-btn:hover, .convert-btn:hover {
+  background: #366fd9;
 }
 
 .select-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 1rem;
-  margin-bottom: 8px;
 }
 
 .select-row label {
   font-weight: 500;
 }
 
-.select-row select {
-  padding: 4px 8px;
-  border-radius: 5px;
-  border: 1px solid #bfc7d8;
+select#format {
+  padding: 5px 15px;
   font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #aac1e3;
+  background: #f9fafb;
 }
 
 .convert-btn {
-  width: 100%;
-  background: #4a90e2;
+  margin-top: 8px;
+  background: #366fd9;
   color: #fff;
   border: none;
-  border-radius: 7px;
-  font-size: 1.1rem;
-  padding: 12px 0;
+  border-radius: 6px;
+  padding: 10px 0;
+  font-size: 1.05rem;
+  font-weight: 600;
   cursor: pointer;
-  margin-top: 8px;
-  transition: background .2s;
-}
-
-.convert-btn:hover {
-  background: #357abd;
+  transition: background 0.17s;
 }
 
 .result-box {
-  margin-top: 12px;
+  margin-top: 18px;
   text-align: center;
-  font-size: 1rem;
-  color: #1a9d35;
-  word-break: break-all;
+  font-size: 1.05rem;
+  min-height: 30px;
+}
+
+.result-box img {
+  margin-top: 8px;
+  max-width: 100%;
+  border-radius: 6px;
+  box-shadow: 0 2px 12px 0 rgba(90,139,238,0.07);
 }
 
 footer {
-  text-align: center;
-  color: #aaa;
-  font-size: 0.96rem;
   margin-top: 18px;
+  text-align: center;
+  color: #b4b6c1;
+  font-size: 0.98rem;
 }
 
-@media (max-width: 540px) {
+@media (max-width: 600px) {
   .main-container {
     max-width: 99vw;
-    margin: 0.7rem;
-    padding: 12px 2vw 22px 2vw;
+    padding: 8vw 3vw 16vw 3vw;
+    box-shadow: none;
+    border-radius: 0;
   }
-  .header-section h1 {
-    font-size: 1.1rem;
+  .logo {
+    width: 40px;
+    height: 40px;
   }
-  .upload-icon {
-    width: 32px;
-    height: 32px;
   }
-}
