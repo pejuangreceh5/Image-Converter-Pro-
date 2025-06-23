@@ -53,22 +53,37 @@ fileInput.addEventListener('change', () => {
   }
 });
 
+// Fungsi untuk memaksa download hasil dari Cloudinary
+async function forceDownload(url, filename) {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
+}
+
 uploadForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   resultDiv.innerHTML = '';
   resultDiv.style.color = '';
+
   if (!fileInput.files.length) {
     resultDiv.textContent = 'Please select an image file.';
     resultDiv.style.color = 'red';
     return;
   }
+
   const file = fileInput.files[0];
   const format = formatSelect.value;
 
   resultDiv.textContent = 'Uploading & converting via Cloudinary...';
 
   try {
-    // 1. Upload ke Cloudinary
+    // Upload ke Cloudinary
     const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
     const fd = new FormData();
     fd.append('file', file);
@@ -77,13 +92,25 @@ uploadForm.addEventListener('submit', async (e) => {
     const res = await fetch(url, { method: "POST", body: fd });
     if (!res.ok) throw new Error("Cloudinary upload failed");
     const data = await res.json();
-    // 2. Generate URL hasil konversi format
+
+    // Generate URL hasil konversi format
     const convertedUrl = data.secure_url.replace('/upload/', `/upload/f_${format}/`);
-    // 3. Tampilkan hasil download & preview
+
+    // Fetch gambar hasil sebagai blob untuk preview (tanpa expose url aslinya)
+    const imgRes = await fetch(convertedUrl);
+    const imgBlob = await imgRes.blob();
+    const imgSrc = URL.createObjectURL(imgBlob);
+
+    // Render preview dan tombol download (tanpa expose url Cloudinary)
     resultDiv.innerHTML = `
-      <a href="${convertedUrl}" download="converted.${format}" target="_blank">Download Converted Image (${format.toUpperCase()})</a><br>
-      <img src="${convertedUrl}" alt="Converted Preview" style="max-width:100%;margin-top:12px;border:1px solid #ddd;">
+      <img src="${imgSrc}" alt="Converted Preview" style="max-width:100%;margin-top:12px;border:1px solid #ddd;"><br>
+      <button id="downloadBtn" type="button" class="convert-btn">Download</button>
     `;
+
+    document.getElementById('downloadBtn').addEventListener('click', function() {
+      forceDownload(convertedUrl, `converted.${format}`);
+    });
+
     resultDiv.style.color = '';
   } catch (err) {
     resultDiv.textContent = 'Error: ' + err.message;
